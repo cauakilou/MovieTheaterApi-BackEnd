@@ -5,11 +5,6 @@ import BackEnd.MovieTheatherAPI.Model.Exception.ErrorMessage;
 import BackEnd.MovieTheatherAPI.Model.Jwt.JwtToken;
 import BackEnd.MovieTheatherAPI.Model.Jwt.JwtUserDetailsService;
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserLoginDto;
-import BackEnd.MovieTheatherAPI.Model.Dto.User.UserResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -50,5 +45,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST,
                 "credenciais invalidas"));
     }
+
+
 }
 

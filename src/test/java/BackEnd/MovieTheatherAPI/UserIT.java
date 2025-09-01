@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.List;
+
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -293,14 +295,17 @@ class UserIT {
 
     @Test
     void AtualizarUsuario_ComIdExistenteSenhaValidaOutroUsuario_RetornarForbiden403() {
-        testClient
+        ErrorMessage responseBody = testClient
                 .patch()
-                .uri("/api/v1/usuarios/101")
+                .uri("/api/v1/usuarios/123")
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UserPasswordDto("123456","101010","101010"))
                 .exchange()
-                .expectStatus().isForbidden();
+                .expectStatus().isForbidden().expectBody(ErrorMessage.class).returnResult().getResponseBody();
+
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
     }
 
     @Test
@@ -347,6 +352,39 @@ class UserIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
+    }
+    
+    //Recuperar todos os usuarios
+
+    @Test
+    void buscarUsuarios_ComIdExistenteAdmin_RetornarUsuarioCriadosComStatus200() {
+        List<UserResponseDto> responseBody = testClient
+                .get()
+                .uri("/api/v1/usuarios")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(UserResponseDto.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.isEmpty()).isNotEqualTo(true);
+        org.assertj.core.api.Assertions.assertThat(responseBody).hasSize(4);
+    }
+
+    @Test
+    void buscarUsuarios_ComIdExistenteUsuario_RetornarStatus401() {
+        ErrorMessage responseBody = testClient
+                .get()
+                .uri("/api/v1/usuarios")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"caua@email.com","654321"))
+                .exchange()
+                .expectStatus().isEqualTo(403)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
     }
 
 }
