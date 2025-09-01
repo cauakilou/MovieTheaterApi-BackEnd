@@ -63,4 +63,5 @@ public class UserService {
     public List<UserEntity> buscarTodos() {
     return userRepository.findAll();
     }
+
 }
