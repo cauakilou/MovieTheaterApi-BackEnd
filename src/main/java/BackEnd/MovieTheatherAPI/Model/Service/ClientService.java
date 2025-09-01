@@ -45,6 +45,10 @@ public class ClientService {
     @Transactional(readOnly = true)
     public Page<ClientProjection> buscarTodos(Pageable pageable) {
         return clienteRepository.findAllPageable(pageable);
+    }
 
+    @Transactional(readOnly = true)
+    public ClientEntity buscarPorUsuarioId(Long id) {
+        return clienteRepository.findByUserId(id);
     }
 }

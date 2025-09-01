@@ -3,7 +3,7 @@ package BackEnd.MovieTheatherAPI;
 
 import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientCreateDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientResponseDto;
-import BackEnd.MovieTheatherAPI.Model.Dto.PageableDTO;
+import BackEnd.MovieTheatherAPI.Model.Dto.PageableDto;
 import BackEnd.MovieTheatherAPI.Model.Exception.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
         //Testes para a criação de clientes
         @Test
-        void CriarClient_dadosValidos_status201(){
+        void CriarClient_dadosValidos_status201() {
             ClientResponseDto responseBody = testClient
                     .post()
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com" , "123456"))
-                    .bodyValue(new ClientCreateDto("tobias ferreira","78909807016","21987654321"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com", "123456"))
+                    .bodyValue(new ClientCreateDto("tobias ferreira", "78909807016", "21987654321"))
                     .exchange()
                     .expectStatus().isCreated()
                     .expectBody(ClientResponseDto.class)
@@ -42,13 +42,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
         }
 
         @Test
-        void CriarClient_cpfRepetido_status409(){
+        void CriarClient_cpfRepetido_status409() {
             ErrorMessage responseBody = testClient
                     .post()
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com" , "123456"))
-                    .bodyValue(new ClientCreateDto("tobias ferreira","81708991093","21987654321"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com", "123456"))
+                    .bodyValue(new ClientCreateDto("tobias ferreira", "81708991093", "21987654321"))
                     .exchange()
                     .expectStatus().isEqualTo(409)
                     .expectBody(ErrorMessage.class)
@@ -59,13 +59,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
         }
 
         @Test
-        void CriarClient_dadosInvalidos_status422(){
+        void CriarClient_dadosInvalidos_status422() {
             ErrorMessage responseBody = testClient
                     .post()
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com" , "123456"))
-                    .bodyValue(new ClientCreateDto("","97688468019","213534321"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com", "123456"))
+                    .bodyValue(new ClientCreateDto("", "97688468019", "213534321"))
                     .exchange()
                     .expectStatus().isEqualTo(422)
                     .expectBody(ErrorMessage.class)
@@ -78,8 +78,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
                     .post()
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com" , "123456"))
-                    .bodyValue(new ClientCreateDto("tobias ferreira","","213534321"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com", "123456"))
+                    .bodyValue(new ClientCreateDto("tobias ferreira", "", "213534321"))
                     .exchange()
                     .expectStatus().isEqualTo(422)
                     .expectBody(ErrorMessage.class)
@@ -92,8 +92,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
                     .post()
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com" , "123456"))
-                    .bodyValue(new ClientCreateDto("","",""))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "toby@email.com", "123456"))
+                    .bodyValue(new ClientCreateDto("", "", ""))
                     .exchange()
                     .expectStatus().isEqualTo(422)
                     .expectBody(ErrorMessage.class)
@@ -110,7 +110,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
                     .uri("/api/v1/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
                     .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
-                    .bodyValue(new ClientCreateDto("tobias ferreira", "97688468019","1140028922"))
+                    .bodyValue(new ClientCreateDto("tobias ferreira", "97688468019", "1140028922"))
                     .exchange()
                     .expectStatus().isForbidden()
                     .expectBody(ErrorMessage.class)
@@ -120,15 +120,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
             org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
 
         }
-        
+
         // recuperar cliente pelo ID
 
         @Test
-        void RecuperarPeloIdClient_dadosValidos_status200(){
+        void RecuperarPeloIdClient_dadosValidos_status200() {
             ClientResponseDto responseBody = testClient
                     .get()
                     .uri("/api/v1/clientes/10")
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com" , "123456"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody(ClientResponseDto.class)
@@ -174,14 +174,14 @@ import org.springframework.test.web.reactive.server.WebTestClient;
         //Testes para recuperar todos os clientes
 
         @Test
-        void RecuperarClientes_dadosValidos_status200(){
-            PageableDTO responseBody = testClient
+        void RecuperarClients_dadosValidos_status200() {
+            PageableDto responseBody = testClient
                     .get()
                     .uri("/api/v1/clientes")
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com" , "123456"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
                     .exchange()
                     .expectStatus().isOk()
-                    .expectBody(PageableDTO.class)
+                    .expectBody(PageableDto.class)
                     .returnResult().getResponseBody();
 
             org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
@@ -192,20 +192,20 @@ import org.springframework.test.web.reactive.server.WebTestClient;
             responseBody = testClient
                     .get()
                     .uri("/api/v1/clientes?size=1&page=1")
-                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com" , "123456"))
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
                     .exchange()
                     .expectStatus().isOk()
-                    .expectBody(PageableDTO.class)
+                    .expectBody(PageableDto.class)
                     .returnResult().getResponseBody();
 
             org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-            org.assertj.core.api.Assertions.assertThat(responseBody.getContent()).hasSize(1 );
+            org.assertj.core.api.Assertions.assertThat(responseBody.getContent()).hasSize(1);
             org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(1);
             org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(2);
         }
 
         @Test
-        void RecuperarClientes_RoleInvalida_status403() {
+        void RecuperarClients_RoleInvalida_status403() {
             ErrorMessage responseBody = testClient
                     .get()
                     .uri("/api/v1/clientes")
@@ -219,5 +219,38 @@ import org.springframework.test.web.reactive.server.WebTestClient;
             org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
 
         }
+
+        //Testes para Recuperar os dados do cliente
+
+        @Test
+        void RecuperarClientDetalhes_dadosValidos_status200() {
+            ClientResponseDto responseBody = testClient
+                    .get()
+                    .uri("/api/v1/clientes/detalhes")
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "caua@email.com", "654321"))
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody(ClientResponseDto.class)
+                    .returnResult().getResponseBody();
+
+            org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+            org.assertj.core.api.Assertions.assertThat(responseBody.getName()).isEqualTo("Bianca Silva");
+            org.assertj.core.api.Assertions.assertThat(responseBody.getCpf()).isEqualTo("97688468019");
+        }
+
+        @Test
+        void RecuperarClientDetalhes_Admin_status403() {
+            ErrorMessage responseBody = testClient
+                    .get()
+                    .uri("/api/v1/clientes/detalhes")
+                    .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
+                    .exchange()
+                    .expectStatus().isEqualTo(403)
+                    .expectBody(ErrorMessage.class)
+                    .returnResult().getResponseBody();
+
+            org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+            org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
+        }
+
     }
-    

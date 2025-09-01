@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class PageableDTO {
+public class PageableDto {
     private List Content = new ArrayList<>();
     private boolean first;
     private boolean last;

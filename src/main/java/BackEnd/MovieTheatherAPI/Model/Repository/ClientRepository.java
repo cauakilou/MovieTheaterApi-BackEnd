@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
-    @Query("select c from Cliente c")
+    @Query("SELECT c FROM ClientEntity c ORDER BY c.name ASC")
     Page<ClientProjection> findAllPageable(Pageable pageable);
 
+    ClientEntity findByUserId(Long id);
 }

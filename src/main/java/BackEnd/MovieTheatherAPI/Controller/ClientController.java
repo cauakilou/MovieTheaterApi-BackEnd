@@ -5,7 +5,7 @@ import BackEnd.MovieTheatherAPI.Model.Dto.Mapper.ClientMapper;
 import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientCreateDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Mapper.PageableMapper;
-import BackEnd.MovieTheatherAPI.Model.Dto.PageableDTO;
+import BackEnd.MovieTheatherAPI.Model.Dto.PageableDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.ClientEntity;
 import BackEnd.MovieTheatherAPI.Model.Jwt.JwtUserDetails;
 import BackEnd.MovieTheatherAPI.Model.Repository.Projection.ClientProjection;
@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,9 +49,16 @@ public class ClientController {
 
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PageableDTO> getAll(@Parameter(hidden = true)@PageableDefault(size = 5, sort = {"nome"}) Pageable pageable){
+    public ResponseEntity<PageableDto> getAll(@Parameter(hidden = true)@PageableDefault(size = 5, sort = {"name"}) Pageable pageable){
         Page<ClientProjection> listaDeClientes = clientService.buscarTodos(pageable);
         return ResponseEntity.ok((PageableMapper.pageableToDTO(listaDeClientes)));
+    }
+
+    @GetMapping(path = "/detalhes")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<ClientResponseDto> getDetalhess(@AuthenticationPrincipal JwtUserDetails userDetails){
+        ClientEntity cliente = clientService.buscarPorUsuarioId(userDetails.getId());
+        return ResponseEntity.ok((ClientMapper.toDto(cliente)));
     }
 
 }
