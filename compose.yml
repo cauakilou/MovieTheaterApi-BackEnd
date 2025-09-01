@@ -1,0 +1,32 @@
+services:
+  # Serviço do PostgreSQL
+  database:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Samella4551%10
+      POSTGRES_DB: MovieTheater
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Serviço da sua aplicação
+  app:
+    # O ponto ('.') indica que o Docker deve procurar o Dockerfile nesta pasta.
+    build: .
+    container_name: movie_theather_api_app # Mudei o nome para ser mais específico
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      # Variáveis de ambiente que a sua aplicação usará
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/MovieTheater
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Samella4551%10
+    restart: always
+
+volumes:
+  postgres_data:
