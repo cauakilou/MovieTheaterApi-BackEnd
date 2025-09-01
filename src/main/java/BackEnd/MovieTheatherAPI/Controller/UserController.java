@@ -2,6 +2,7 @@ package BackEnd.MovieTheatherAPI.Controller;
 
 import BackEnd.MovieTheatherAPI.Model.Dto.Mapper.UserMapper;
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserCreateDto;
+import BackEnd.MovieTheatherAPI.Model.Dto.User.UserPasswordDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.UserEntity;
 import BackEnd.MovieTheatherAPI.Model.Service.UserService;
@@ -32,5 +33,15 @@ public class UserController {
             .status(HttpStatus.OK)
             .body(UserMapper.toUserDto(userService.search(id)));
     }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT') AND (#id == authentication.principal.id)")
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id
+            , @Valid @RequestBody UserPasswordDto dto) {
+        userService.editPassword(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmarSenha());
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }

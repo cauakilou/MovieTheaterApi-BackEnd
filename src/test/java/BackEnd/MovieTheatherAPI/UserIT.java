@@ -2,6 +2,7 @@ package BackEnd.MovieTheatherAPI;
 
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserCreateDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserLoginDto;
+import BackEnd.MovieTheatherAPI.Model.Dto.User.UserPasswordDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.User.UserResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Exception.ErrorMessage;
 import BackEnd.MovieTheatherAPI.Model.Jwt.JwtToken;
@@ -275,6 +276,77 @@ class UserIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+    }
+    // teste para atualização de senha
+
+    @Test
+    void AtualizarUsuario_ComIdExistenteSenhaValida_RetornarUsuarioCriadoComStatus204() {
+        testClient
+                .patch()
+                .uri("/api/v1/usuarios/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UserPasswordDto("123456","101010","101010"))
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void AtualizarUsuario_ComIdExistenteSenhaValidaOutroUsuario_RetornarForbiden403() {
+        testClient
+                .patch()
+                .uri("/api/v1/usuarios/101")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UserPasswordDto("123456","101010","101010"))
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
+    void AtualizarUsuario_ComIdInvalido_RetornarErroMessageStatus401() {
+        ErrorMessage responseBody = testClient
+                .patch()
+                .uri("/api/v1/usuarios/1000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UserPasswordDto("123456","101010","101010"))
+                .exchange()
+                .expectStatus().isEqualTo(401)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNull();
+    }
+
+    @Test
+    void AtualizarUsuario_ComSenhasInvalidas_RetornarErroMessageStatus400() {
+        ErrorMessage responseBody = testClient
+                .patch()
+                .uri("/api/v1/usuarios/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UserPasswordDto("123456","10101","101010"))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
+
+        responseBody = testClient
+                .patch()
+                .uri("/api/v1/usuarios/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient,"ana@email.com","123456"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UserPasswordDto("123457","10101","101010"))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
     }
 
 }
