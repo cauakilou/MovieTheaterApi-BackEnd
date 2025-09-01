@@ -36,7 +36,8 @@ public class UserService {
         return  userRepository.findByEmail(email);
     }
 
-    public UserEntity.Role buscarRolePorUsername(String email) {
-        return userRepository.findRoleByEmail(email);
+
+    public UserEntity.Role buscarRolePorEmail(String email) {
+        return  userRepository.findByEmail(email).getRole();
     }
 }

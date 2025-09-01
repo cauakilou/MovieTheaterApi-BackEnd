@@ -21,7 +21,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public JwtToken getTokenAuthenticated(String email) {
-        UserEntity.Role role = usuarioService.buscarRolePorUsername(email);
+        UserEntity.Role role = usuarioService.buscarRolePorEmail(email);
         return JwtUtils.createToken(email, role.name().substring("ROLE_".length()));
 
     }
