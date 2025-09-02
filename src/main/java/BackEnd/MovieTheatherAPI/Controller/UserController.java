@@ -49,8 +49,8 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<UserEntity> listaDeUsers = userService.buscarTodos();
         return ResponseEntity.ok(UserMapper.toListDTO(listaDeUsers) );
-
     }
+
 
 
 

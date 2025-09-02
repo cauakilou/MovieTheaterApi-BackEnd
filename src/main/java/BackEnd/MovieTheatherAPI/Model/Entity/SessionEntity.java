@@ -25,7 +25,7 @@ public class SessionEntity {
     @Column(name = "Id")
     private long id;
 
-    @Column(name = "Hour",nullable = false,length = 25)
+    @Column(name = "DateTime",nullable = false,length = 25)
     private LocalDateTime horario;
 
     @ManyToOne

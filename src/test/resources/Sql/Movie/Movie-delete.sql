@@ -1,0 +1,3 @@
+DELETE FROM Clients;
+DELETE FROM Users;
+DELETE FROM Movies;

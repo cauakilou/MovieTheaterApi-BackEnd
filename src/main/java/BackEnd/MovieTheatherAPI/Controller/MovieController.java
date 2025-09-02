@@ -46,5 +46,25 @@ public class MovieController {
         Page<MovieProjection> listaDeFilmes = movieService.buscarTodos(pageable);
         return ResponseEntity.ok((PageableMapper.pageableToDTO(listaDeFilmes)));
     }
-    
+
+    @PreAuthorize("hasRole ('ADMIN')")
+    @PatchMapping("/{id}/status/{status}")
+    public ResponseEntity<MovieResponseDto> MudarOStatus(
+            @PathVariable long id,
+            @PathVariable String status){;
+        return ResponseEntity.ok().body(MovieMapper.toDto(movieService.trocarStatus(id,status)));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deletarFilme(@PathVariable long id){
+        movieService.deletarFilme(id);
+        return ResponseEntity.ok(null);
+    }
+
+
+
+
+
+
 }

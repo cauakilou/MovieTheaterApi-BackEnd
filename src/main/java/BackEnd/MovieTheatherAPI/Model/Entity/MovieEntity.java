@@ -58,7 +58,7 @@ public class MovieEntity {
     @Column(name = "Name", nullable = false, unique = true, length = 100)
     private String nome;
 
-    @Column(name = "Sinopse", nullable = false, length = 200)
+    @Column(name = "Sinopse", nullable = false, length = 350)
     private String sinopse;
 
     @Enumerated(EnumType.STRING)

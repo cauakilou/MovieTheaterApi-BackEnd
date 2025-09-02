@@ -20,9 +20,11 @@ public class MovieMapper {
 
     public static MovieResponseDto toDto(MovieEntity movie){
         MovieResponseDto dto = new ModelMapper().map(movie, MovieResponseDto.class);
-        Duration duracaoTotal = movie.getDuracao();
-        dto.setDuracaoHoras((int) duracaoTotal.toHours());
-        dto.setDuracaoMinutos((int) duracaoTotal.toMinutesPart());
+        Duration duracao = movie.getDuracao();
+        long horas = duracao.toHours();
+        long minutos = duracao.toMinutesPart();
+        dto.setDuracaoFormatada(String.format("%d:%02d", horas, minutos));
+
         return dto;
     }
 }
