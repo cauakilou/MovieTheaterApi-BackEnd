@@ -21,6 +21,7 @@ public class UserService {
     @Transactional
     public UserEntity save(UserEntity user){
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             throw new UserNameUniqueViolationException(String.format("Email '%s' já cadastrado", user.getEmail()));

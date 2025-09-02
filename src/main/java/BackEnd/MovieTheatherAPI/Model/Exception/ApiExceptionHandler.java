@@ -35,7 +35,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Campo(s) invalidos", result));
     }
 
-    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class,MovieAlreadyExist.class})
     public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request){
 
         log.error(apiError,ex);
