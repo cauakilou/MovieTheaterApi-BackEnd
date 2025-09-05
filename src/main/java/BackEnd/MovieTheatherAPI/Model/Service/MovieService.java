@@ -1,13 +1,10 @@
 package BackEnd.MovieTheatherAPI.Model.Service;
 
 import BackEnd.MovieTheatherAPI.Model.Entity.MovieEntity;
-import BackEnd.MovieTheatherAPI.Model.Entity.MovieEntity.Status;
-import BackEnd.MovieTheatherAPI.Model.Exception.CpfUniqueViolationException;
 import BackEnd.MovieTheatherAPI.Model.Exception.EntityNotFoundException;
 import BackEnd.MovieTheatherAPI.Model.Exception.MovieAlreadyExist;
 import BackEnd.MovieTheatherAPI.Model.Repository.MovieRepository;
 import BackEnd.MovieTheatherAPI.Model.Repository.Projection.MovieProjection;
-import BackEnd.MovieTheatherAPI.Model.Repository.SessionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;

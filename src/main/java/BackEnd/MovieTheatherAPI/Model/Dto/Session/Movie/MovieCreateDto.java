@@ -24,6 +24,9 @@ public class MovieCreateDto {
     @NotBlank
     private String sinopse;
 
+    @NotBlank
+    private String poster;
+
     @NotBlank(message = "A classificação é obrigatória.")
     @Pattern(regexp = "LIVRE|DEZ_ANOS|DOZE_ANOS|QUATORZE_ANOS|DEZESSEIS_ANOS|DEZOITO_ANOS", message = "Classificação inválida.")
     private String classificacao;

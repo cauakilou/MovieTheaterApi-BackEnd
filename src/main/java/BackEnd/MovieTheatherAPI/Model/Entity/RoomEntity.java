@@ -1,23 +1,25 @@
 package BackEnd.MovieTheatherAPI.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@Table(name = "Rooms")
+@Getter@Setter@AllArgsConstructor@NoArgsConstructor
+@Entity@Table(name = "Rooms")
 public class RoomEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
+
     public enum TipoSala {
         PADRAO,
         IMAX,
@@ -26,60 +28,23 @@ public class RoomEntity {
         VIP
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+    @Column(name = "Room_Name", unique = true, length = 20)
+    private String nome; // Ex: "Sala 1", "Sala VIP Bradesco"
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Model",nullable = false,length = 10)
+    @Column(name = "Model", length = 10)
     private TipoSala tipo;
 
-    @Column(name = "Capacity",nullable = false,length = 4)
-    private int capacidade;
-
-    @Column(name = "Addons",length = 40)
-    private List<String> recursosAdicionais;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatEntity> seats = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "Creation_Date")
     private LocalDateTime creationDate;
 
-    @LastModifiedDate
-    @Column(name = "Modification_Date")
-    private LocalDateTime modificationDate;
 
-    @CreatedBy
-    @Column(name = "Created_By")
-    private String createdBy;
-
-    @LastModifiedBy
-    @Column(name = "Modified_By")
-    private String modifiedBy;
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        RoomEntity that = (RoomEntity) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "RoomEntity{" +
-                "id=" + id +
-                ", tipo=" + tipo +
-                ", capacidade=" + capacidade +
-                ", recursosAdicionais=" + recursosAdicionais +
-                ", creationDate=" + creationDate +
-                ", modificationDate=" + modificationDate +
-                ", createdBy='" + createdBy + '\'' +
-                ", modifiedBy='" + modifiedBy + '\'' +
-                '}';
+    public int getCapacidade() {
+        return this.seats.size();
     }
 }

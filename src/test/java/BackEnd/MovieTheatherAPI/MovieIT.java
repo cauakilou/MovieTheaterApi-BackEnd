@@ -1,7 +1,5 @@
 package BackEnd.MovieTheatherAPI;
 
-import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientCreateDto;
-import BackEnd.MovieTheatherAPI.Model.Dto.Client.ClientResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.PageableDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Session.Movie.MovieCreateDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Session.Movie.MovieResponseDto;
@@ -21,7 +19,7 @@ import static BackEnd.MovieTheatherAPI.Model.Entity.MovieEntity.Status.EM_CARTAZ
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "/Sql/Movie/Movie-insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "/Sql/Movie/Movie-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class MovieIT {
+class MovieIT {
 
     @Autowired
     WebTestClient testClient;
@@ -34,7 +32,14 @@ public class MovieIT {
                 .uri("/api/v1/filmes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
-                .bodyValue(new MovieCreateDto("Vingadores: Ultimato", "Uma equipe de heróis se une para reverter as ações de Thanos.", "QUATORZE_ANOS", "ACAO", 181))
+                .bodyValue(new MovieCreateDto(
+    "Vingadores: Ultimato",
+    "Uma equipe de heróis se une para reverter as ações de Thanos.",
+    "https://image.tmdb.org/t/p/original/q6725aR8Zs4IwGMXzZT8aC8j4bV.jpg", // URL do pôster adicionada
+    "QUATORZE_ANOS",
+    "ACAO",
+    181
+))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(MovieResponseDto.class)
@@ -59,7 +64,7 @@ public class MovieIT {
                 .uri("/api/v1/filmes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
-                .bodyValue(new MovieCreateDto("", "Sinopse válida.", "LIVRE", "ACAO", 120))
+                .bodyValue(new MovieCreateDto("", "Sinopse válida.","a", "LIVRE", "ACAO", 120))
                 .exchange()
                 .expectStatus().isEqualTo(422) // Espera o status 422
                 .expectBody(ErrorMessage.class)
@@ -74,7 +79,7 @@ public class MovieIT {
                 .uri("/api/v1/filmes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
-                .bodyValue(new MovieCreateDto("Nome Válido", "Sinopse válida.", "LIVRE", "ACAO", 0))
+                .bodyValue(new MovieCreateDto("Nome Válido", "Sinopse válida.","a", "LIVRE", "ACAO", 0))
                 .exchange()
                 .expectStatus().isEqualTo(422) // Espera o status 422
                 .expectBody(ErrorMessage.class)
@@ -94,7 +99,7 @@ public class MovieIT {
                 .uri("/api/v1/filmes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
-                .bodyValue(new MovieCreateDto("Parasita", "A saga de uma família mafiosa.", "DEZESSEIS_ANOS", "DRAMA", 175))
+                .bodyValue(new MovieCreateDto("Parasita", "A saga de uma família mafiosa.","a","DEZESSEIS_ANOS", "DRAMA", 175))
                 .exchange()
                 .expectStatus().isEqualTo(409) // Espera o status 409
                 .expectBody(ErrorMessage.class)
@@ -114,7 +119,7 @@ public class MovieIT {
                 .uri("/api/v1/filmes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "caua@email.com","654321")) // Autenticando como CLIENT
-                .bodyValue(new MovieCreateDto("Filme qualquer", "Sinopse qualquer.", "LIVRE", "COMEDIA", 90))
+                .bodyValue(new MovieCreateDto("Filme qualquer", "Sinopse qualquer.","a", "LIVRE", "COMEDIA", 90))
                 .exchange()
                 .expectStatus().isForbidden(); // Espera o status 403
     }
@@ -137,7 +142,7 @@ public class MovieIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseBody.getContent()).hasSize(3); // Verifica o tamanho da página
-        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(0); // Verifica a página atual
+        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isZero(); // Verifica a página atual
     }
 
     @Test

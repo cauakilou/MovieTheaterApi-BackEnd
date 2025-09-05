@@ -6,17 +6,23 @@ import BackEnd.MovieTheatherAPI.Model.Exception.PasswordInvalidException;
 import BackEnd.MovieTheatherAPI.Model.Exception.UserNameUniqueViolationException;
 import BackEnd.MovieTheatherAPI.Model.Repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@AllArgsConstructor
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Transactional
     public UserEntity save(UserEntity user){

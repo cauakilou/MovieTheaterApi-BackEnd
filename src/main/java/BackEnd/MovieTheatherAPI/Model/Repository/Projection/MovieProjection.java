@@ -8,6 +8,7 @@ public interface MovieProjection {
     Long getId();
     String getNome();
     String GetSinopse();
+    String GetPoster();
     MovieEntity.Classificacao getClassificacao();
 
     // Altere para retornar o Integer de minutos, ou mantenha Duration se preferir
@@ -16,4 +17,5 @@ public interface MovieProjection {
 
     MovieEntity.Genero getGenero();
     MovieEntity.Status getStatus();
+
 }

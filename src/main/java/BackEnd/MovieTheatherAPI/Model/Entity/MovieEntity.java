@@ -68,6 +68,9 @@ public class MovieEntity {
     @Column(name = "Duration", nullable = false, length = 10)
     private Duration duracao;
 
+    @Column(name = "Poster", nullable = false, length = 300)
+    private String poster;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "Gender", nullable = false, length = 25)
     private Genero genero;

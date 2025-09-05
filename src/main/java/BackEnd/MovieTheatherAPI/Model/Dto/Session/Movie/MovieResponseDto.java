@@ -16,6 +16,7 @@ public class MovieResponseDto {
     private Long id;
     private String nome;
     private String sinopse;
+    private String poster;
     private Classificacao classificacao;
     private String duracaoFormatada;
     private Genero genero;

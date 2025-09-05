@@ -49,9 +49,9 @@ public class MovieController {
 
     @PreAuthorize("hasRole ('ADMIN')")
     @PatchMapping("/{id}/status/{status}")
-    public ResponseEntity<MovieResponseDto> MudarOStatus(
+    public ResponseEntity<MovieResponseDto> mudarStatus(
             @PathVariable long id,
-            @PathVariable String status){;
+            @PathVariable String status){
         return ResponseEntity.ok().body(MovieMapper.toDto(movieService.trocarStatus(id,status)));
     }
 

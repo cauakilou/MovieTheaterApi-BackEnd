@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<?> autenticar(
+    public ResponseEntity<Object> autenticar(
             @RequestBody @Valid UserLoginDto dto, HttpServletRequest request
     ){
         log.info("Processo de autenticação pelo login {}",dto.getEmail());
