@@ -50,7 +50,7 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarRooms(@PathVariable long id){
         roomService.deletar(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.noContent().build();
     }
 
 

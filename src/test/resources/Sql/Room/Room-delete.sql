@@ -1,4 +1,4 @@
-DELETE FROM Clients;
-DELETE FROM Users;
 DELETE FROM Seats;
 DELETE FROM Rooms;
+DELETE FROM Clients;
+DELETE FROM Users;

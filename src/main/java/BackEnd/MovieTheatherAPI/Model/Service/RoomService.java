@@ -3,9 +3,12 @@ package BackEnd.MovieTheatherAPI.Model.Service;
 import BackEnd.MovieTheatherAPI.Model.Dto.PageableDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.RoomEntity;
 import BackEnd.MovieTheatherAPI.Model.Exception.EntityNotFoundException;
+import BackEnd.MovieTheatherAPI.Model.Exception.RoomNameUniqueViolationException;
+import BackEnd.MovieTheatherAPI.Model.Exception.UserNameUniqueViolationException;
 import BackEnd.MovieTheatherAPI.Model.Repository.Projection.RoomProjection;
 import BackEnd.MovieTheatherAPI.Model.Repository.RoomRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,11 @@ public class RoomService {
 
     @Transactional
     public RoomEntity criarSala(RoomEntity room){
-        return roomRepository.save(room);
+        try {
+            return roomRepository.save(room);
+        } catch (DataIntegrityViolationException e ) {
+            throw new RoomNameUniqueViolationException(String.format("nome: %s invalido ",room.getNome()));
+        }
     }
 
     @Transactional(readOnly = true)
@@ -35,6 +42,8 @@ public class RoomService {
     }
     @Transactional
     public void deletar(long id) {
-        roomRepository.deleteById(id);
+        roomRepository.delete(roomRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException(String.format("Sala com id %s encontrado",id))
+        ));
     }
 }
