@@ -10,8 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class SeatResponseDto {
-
-    private String fileira;
+    private long id;
+    private char fileira;
     private int numero;
     private String tipo;
 

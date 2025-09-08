@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,6 +46,22 @@ public class RoomEntity {
     @Column(name = "Creation_Date")
     private LocalDateTime creationDate;
 
+    @LastModifiedDate
+    @Column(name = "Modification_Date")
+    private LocalDateTime modificationDate;
+
+    @CreatedBy
+    @Column(name = "Created_By")
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(name = "Modified_By")
+    private String modifiedBy;
+
+    public void addSeat(SeatEntity seat) {
+        this.seats.add(seat);
+        seat.setRoom(this);
+    }
 
     public int getCapacidade() {
         return this.seats.size();

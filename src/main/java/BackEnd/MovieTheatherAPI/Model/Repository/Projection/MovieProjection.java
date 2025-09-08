@@ -5,7 +5,7 @@ import java.time.Duration;
 
 public interface MovieProjection {
 
-    Long getId();
+    long getId();
     String getNome();
     String GetSinopse();
     String GetPoster();

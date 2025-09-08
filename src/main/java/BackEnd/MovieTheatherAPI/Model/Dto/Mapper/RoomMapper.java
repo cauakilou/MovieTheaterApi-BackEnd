@@ -2,23 +2,25 @@ package BackEnd.MovieTheatherAPI.Model.Dto.Mapper;
 
 import BackEnd.MovieTheatherAPI.Model.Dto.Session.Room.RoomCreateDto;
 import BackEnd.MovieTheatherAPI.Model.Dto.Session.Room.RoomResponseDto;
+import BackEnd.MovieTheatherAPI.Model.Dto.Session.Seat.SeatResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.RoomEntity;
 import BackEnd.MovieTheatherAPI.Model.Entity.SeatEntity;
-import BackEnd.MovieTheatherAPI.Model.Service.RoomService;
-import BackEnd.MovieTheatherAPI.Model.Utils.AlfabetoStream;
 import BackEnd.MovieTheatherAPI.Model.Utils.SeatsCreate;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomMapper {
-    //mapper do nome
+
     public static RoomEntity ToRoomEntity(RoomCreateDto dto){
         RoomEntity room = new RoomEntity();
         room.setTipo(RoomEntity.TipoSala.valueOf(dto.getTipo()));
         room.setNome(dto.getNome());
-        room.setSeats(SeatsCreate.criarAssentos(dto.getLinha(),dto.getColuna(),room));
+
+        // ** A LÓGICA DE ASSOCIAÇÃO CORRIGIDA **
+        List<SeatEntity> novosAssentos = SeatsCreate.criarAssentos(dto.getLinha(), dto.getColuna());
+        novosAssentos.forEach(room::addSeat); // Usa o novo método auxiliar
+
         return room;
     }
 
@@ -26,9 +28,18 @@ public class RoomMapper {
         RoomResponseDto dto = new RoomResponseDto();
         dto.setNome(room.getNome());
         dto.setTipo(String.valueOf(room.getTipo()));
-        dto.setSeats(room.getSeats());
+
+        if (room.getSeats() != null) {
+            dto.setSeats(room.getSeats().stream().map(seatEntity -> {
+                SeatResponseDto seatDto = new SeatResponseDto();
+                seatDto.setId(seatEntity.getId());
+                seatDto.setFileira(seatEntity.getFileira());
+                seatDto.setNumero(seatEntity.getNumero());
+                seatDto.setTipo(seatEntity.getTipo().name());
+                return seatDto;
+            }).collect(Collectors.toList()));
+        }
 
         return dto;
     }
-
 }

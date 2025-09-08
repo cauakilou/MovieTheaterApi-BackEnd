@@ -5,22 +5,25 @@ import BackEnd.MovieTheatherAPI.Model.Entity.SeatEntity;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 public class SeatsCreate {
 
 
-    public static ArrayList<SeatEntity> criarAssentos(int linha, int coluna, RoomEntity room){
-        ArrayList<SeatEntity> conjuntoDeAssentos = new ArrayList<>();
-        for (int i=0;i<linha;i++){
-            for (int j=1;j<coluna+1;j++){
-                var assento = new SeatEntity();
+    // Métudo agora retorna uma List<SeatEntity> e não precisa mais do objeto Room
+    public static List<SeatEntity> criarAssentos(int linha, int coluna){
+        List<SeatEntity> conjuntoDeAssentos = new ArrayList<>();
+        for (int i=0; i < linha; i++){
+            for (int j=1; j <= coluna; j++){
+                SeatEntity assento = new SeatEntity();
                 assento.setFileira(AlfabetoStream.getLetraNaPosicao(i));
                 assento.setNumero(j);
-                assento.setRoom(room);
+                // Não definimos mais a sala aqui
                 conjuntoDeAssentos.add(assento);
-
             }
         }
         return conjuntoDeAssentos;
     }
 }
+

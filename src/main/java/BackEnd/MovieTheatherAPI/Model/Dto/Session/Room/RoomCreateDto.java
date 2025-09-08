@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ import lombok.*;
 @ToString
 public class RoomCreateDto {
     @NotBlank(message = "O nome da sala é obrigatória.")
+    @Pattern(regexp = "^sala-\\d{2}$", message = "O nome da sala deve seguir o padrão 'sala-XX', onde XX são dois dígitos (ex: sala-01).")
     private String nome;
 
     @NotBlank(message = "O tipo de Sala é obrigatório.")

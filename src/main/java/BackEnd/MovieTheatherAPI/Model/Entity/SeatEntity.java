@@ -3,6 +3,12 @@ package BackEnd.MovieTheatherAPI.Model.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -55,6 +61,22 @@ public class SeatEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @CreatedDate
+    @Column(name = "Creation_Date")
+    private LocalDateTime creationDate;
+
+    @LastModifiedDate
+    @Column(name = "Modification_Date")
+    private LocalDateTime modificationDate;
+
+    @CreatedBy
+    @Column(name = "Created_By")
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(name = "Modified_By")
+    private String modifiedBy;
 }
 
 
