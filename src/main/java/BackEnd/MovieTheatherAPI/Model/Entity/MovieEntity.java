@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -70,6 +72,10 @@ public class MovieEntity {
 
     @Column(name = "Poster", nullable = false, length = 300)
     private String poster;
+
+    @OneToMany(mappedBy = "movie")
+    @Column(name = "Session")
+    private List<SessionEntity> sessions = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Gender", nullable = false, length = 25)

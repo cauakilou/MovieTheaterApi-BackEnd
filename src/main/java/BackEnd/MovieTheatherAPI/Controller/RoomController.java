@@ -35,7 +35,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<RoomResponseDto> buscarRoom(@PathVariable long id){
+    public ResponseEntity<RoomResponseDto> buscarRoom(@PathVariable Long id){
         return ResponseEntity.ok().body(RoomMapper.toDto(roomService.buscarPorId(id)));
     }
 
@@ -48,7 +48,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarRooms(@PathVariable long id){
+    public ResponseEntity<Void> deletarRooms(@PathVariable Long id){
         roomService.deletar(id);
         return ResponseEntity.noContent().build();
     }

@@ -36,7 +36,7 @@ public class MovieController {
 
     @PreAuthorize("hasRole ('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<MovieResponseDto> buscarFilmePorId(@PathVariable long id){
+    public ResponseEntity<MovieResponseDto> buscarFilmePorId(@PathVariable Long id){
         return ResponseEntity.status(200).body(MovieMapper.toDto(movieService.buscarFilmes(id)));
     }
 
@@ -50,14 +50,14 @@ public class MovieController {
     @PreAuthorize("hasRole ('ADMIN')")
     @PatchMapping("/{id}/status/{status}")
     public ResponseEntity<MovieResponseDto> mudarStatus(
-            @PathVariable long id,
+            @PathVariable Long id,
             @PathVariable String status){
         return ResponseEntity.ok().body(MovieMapper.toDto(movieService.trocarStatus(id,status)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deletarFilme(@PathVariable long id){
+    public ResponseEntity<Void> deletarFilme(@PathVariable Long id){
         movieService.deletarFilme(id);
         return ResponseEntity.ok(null);
     }

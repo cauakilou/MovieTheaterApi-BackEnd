@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') OR ( hasRole('CLIENT') AND #id == authentication.principal.id)")
-    public ResponseEntity<UserResponseDto> search(@PathVariable long id){
+    public ResponseEntity<UserResponseDto> search(@PathVariable Long id){
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(UserMapper.toUserDto(userService.search(id)));

@@ -38,6 +38,10 @@ public class RoomEntity {
     @Column(name = "Model", length = 10)
     private TipoSala tipo;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @Column(name = "Session")
+    private List<SessionEntity> sessions = new ArrayList<>();
+
     @JsonManagedReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatEntity> seats = new ArrayList<>();

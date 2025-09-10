@@ -13,7 +13,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,14 +29,16 @@ public class SessionEntity {
     @Column(name = "Id")
     private long id;
 
-    @Column(name = "Room",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id", nullable = false)
+    private MovieEntity movie;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
     private RoomEntity room;
 
-    @Column(name = "Seats")
-    private List<SeatEntity> disponiveis;
-
-    @Column(name = "Movie",nullable = false)
-    private MovieEntity movie;
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    private Set<TicketEntity> tickets = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status",nullable = false,length = 25)
@@ -45,6 +49,11 @@ public class SessionEntity {
 
     @Column(name = "Horario")
     private LocalTime horario;
+
+    @Column(name = "Horario_de_Termino")
+    private LocalTime termino;
+
+
 
 
     @CreatedDate
