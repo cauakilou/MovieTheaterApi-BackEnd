@@ -27,10 +27,11 @@ public class SessionMapper {
 
     public static SessionResponseDto toDto(SessionEntity session){
         return new SessionResponseDto(
+                session.getId(),
                 RoomMapper.toDto(session.getRoom()),
                 MovieMapper.toDto(session.getMovie()),
-                String.valueOf(session.getHorario()),
                 String.valueOf(session.getData()),
+                String.valueOf(session.getHorario()),
                 String.valueOf(session.getTermino()));
     }
 }
