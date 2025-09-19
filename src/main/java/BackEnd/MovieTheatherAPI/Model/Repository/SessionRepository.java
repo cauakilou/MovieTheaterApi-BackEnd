@@ -1,14 +1,17 @@
 package BackEnd.MovieTheatherAPI.Model.Repository;
 
 import BackEnd.MovieTheatherAPI.Model.Entity.SessionEntity;
-import BackEnd.MovieTheatherAPI.Model.Repository.Projection.SessionProjection;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface SessionRepository extends JpaRepository<SessionEntity, Long> {
+public interface SessionRepository extends JpaRepository<SessionEntity, Long>, JpaSpecificationExecutor<SessionEntity> {
+    /*
+    @Query(value = "SELECT DISTINCT s FROM SessionEntity s " +
+            "LEFT JOIN FETCH s.room r " +
+            "LEFT JOIN FETCH s.movie m " +
+            "ORDER BY s.data ASC, s.horario ASC",
+            countQuery = "SELECT COUNT(s) FROM SessionEntity s")
+    Page<SessionEntity> findAllPageable(Pageable pageable);
 
-    @Query("SELECT s FROM SessionEntity s ORDER BY s.data ASC, s.horario ASC")
-    Page<SessionProjection> findAllPageable(Pageable pageable);
+     */
 }

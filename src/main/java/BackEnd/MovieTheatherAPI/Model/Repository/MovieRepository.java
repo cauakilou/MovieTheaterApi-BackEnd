@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     @Query("SELECT m FROM MovieEntity m")
     Page<MovieProjection> findAllPageable(Pageable pageable);
+
+
 }

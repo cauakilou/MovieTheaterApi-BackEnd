@@ -13,9 +13,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -37,8 +34,6 @@ public class SessionEntity {
     @JoinColumn(name = "room_id", nullable = false)
     private RoomEntity room;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
-    private Set<TicketEntity> tickets = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status",nullable = false,length = 25)

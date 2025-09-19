@@ -1,10 +1,9 @@
 package BackEnd.MovieTheatherAPI.Model.Service;
 
-import BackEnd.MovieTheatherAPI.Model.Dto.PageableDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.RoomEntity;
+import BackEnd.MovieTheatherAPI.Model.Entity.SeatEntity;
 import BackEnd.MovieTheatherAPI.Model.Exception.EntityNotFoundException;
 import BackEnd.MovieTheatherAPI.Model.Exception.RoomNameUniqueViolationException;
-import BackEnd.MovieTheatherAPI.Model.Exception.UserNameUniqueViolationException;
 import BackEnd.MovieTheatherAPI.Model.Repository.Projection.RoomProjection;
 import BackEnd.MovieTheatherAPI.Model.Repository.RoomRepository;
 import lombok.AllArgsConstructor;
@@ -45,5 +44,10 @@ public class RoomService {
         roomRepository.delete(roomRepository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(String.format("Sala com id %s encontrado",id))
         ));
+    }
+
+    public SeatEntity buscarAssentoPorId(Long id) {
+
+        return roomRepository.findSeatById(id);
     }
 }

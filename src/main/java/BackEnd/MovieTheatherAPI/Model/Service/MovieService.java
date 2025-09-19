@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidParameterException;
+
 @Service
 @AllArgsConstructor
 public class MovieService {
@@ -56,7 +58,7 @@ public class MovieService {
             return movie;
         } catch (IllegalArgumentException e) {
             // 5. Lança uma exceção personalizada se o status for inválido
-            throw new RuntimeException(String.format("Status '%s' é inválido. Valores aceitos: EM_CARTAZ, EM_BREVE, FORA_DE_CARTAZ", status));
+            throw new InvalidParameterException(String.format("Status '%s' é inválido. Valores aceitos: EM_CARTAZ, EM_BREVE, FORA_DE_CARTAZ", status));
         }
 
     }
@@ -66,4 +68,6 @@ public class MovieService {
                 ()->new EntityNotFoundException(String.format("Filme com id %s encontrado",id))
         ));
     }
+
+
 }

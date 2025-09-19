@@ -1,22 +1,22 @@
 package BackEnd.MovieTheatherAPI.Model.Service;
 
+import BackEnd.MovieTheatherAPI.Model.Dto.Mapper.SessionMapper;
 import BackEnd.MovieTheatherAPI.Model.Dto.Session.SessionResponseDto;
 import BackEnd.MovieTheatherAPI.Model.Entity.MovieEntity;
 import BackEnd.MovieTheatherAPI.Model.Entity.RoomEntity;
+import BackEnd.MovieTheatherAPI.Model.Entity.SeatEntity;
 import BackEnd.MovieTheatherAPI.Model.Entity.SessionEntity;
 import BackEnd.MovieTheatherAPI.Model.Exception.EntityNotFoundException;
-import BackEnd.MovieTheatherAPI.Model.Repository.Projection.SessionProjection;
 import BackEnd.MovieTheatherAPI.Model.Repository.SessionRepository;
-import BackEnd.MovieTheatherAPI.Model.Utils.TimeConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class SessionService {
           try {
             return sessionRepository.save(sessao);
         } catch (DataIntegrityViolationException e){
-            throw new DataIntegrityViolationException(String.format("sessão Invalida"));
+            throw new DataIntegrityViolationException(String.format("sessão Invalida %s",sessao));
         }
 
     }
@@ -49,9 +49,42 @@ public class SessionService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public SeatEntity recuperarAssento(Long id){
+        return roomService.buscarAssentoPorId(id);
+    }
+
 
     @Transactional(readOnly = true)
-    public Page<SessionProjection> buscarTodos(Pageable pageable) {
-        return sessionRepository.findAllPageable(pageable);
+    public Page<SessionResponseDto> buscarTodos(Pageable pageable, Long movieId, String genre, String date) {
+
+        // THE FIX: Replace the deprecated 'where(null)' with the modern 'allOf()'
+        Specification<SessionEntity> spec = Specification.allOf();
+
+        if (movieId != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("movie").get("id"), movieId));
+        }
+
+        if (genre != null && !genre.isEmpty()) {
+            MovieEntity.Genero genreEnum = MovieEntity.Genero.valueOf(genre.toUpperCase());
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("movie").get("genero"), genreEnum));
+        }
+
+        if (date != null && !date.isEmpty()) {
+            LocalDate localDate = LocalDate.parse(date);
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("data"), localDate));
+        }
+
+        Page<SessionEntity> entityPage = sessionRepository.findAll(spec, pageable);
+        return entityPage.map(SessionMapper::toDto);
+    }
+
+    public void exclude(Long id) {
+        sessionRepository.delete(sessionRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException(String.format("Elemento com ID %s não encontrado",id))
+        ));
     }
 }

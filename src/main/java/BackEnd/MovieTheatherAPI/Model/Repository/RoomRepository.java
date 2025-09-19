@@ -1,7 +1,7 @@
 package BackEnd.MovieTheatherAPI.Model.Repository;
 
 import BackEnd.MovieTheatherAPI.Model.Entity.RoomEntity;
-import BackEnd.MovieTheatherAPI.Model.Repository.Projection.ClientProjection;
+import BackEnd.MovieTheatherAPI.Model.Entity.SeatEntity;
 import BackEnd.MovieTheatherAPI.Model.Repository.Projection.RoomProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +13,6 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     Page<RoomProjection> findAllPageable(Pageable pageable);
 
     RoomEntity findByNome(String roomName);
+
+    SeatEntity findSeatById(Long id);
 }
