@@ -22,10 +22,10 @@ public class UserEntity {
     @Column(name = "Id")
     private long id;
 
-    @Column(name = "UserEmail",nullable = false,unique = true,length = 100)
+    @Column(name = "user_email",nullable = false,unique = true,length = 100)
     private String email;
 
-    @Column(name = "UserPassword",nullable = false, length = 200)
+    @Column(name = "user_password",nullable = false, length = 200)
     private String password;
 
     @Enumerated(EnumType.STRING)

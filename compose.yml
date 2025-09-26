@@ -10,19 +10,20 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      # Volume para persistir os dados do banco
       - postgres_data:/var/lib/postgresql/data
+      # Volume para carregar o script de inicialização do admin (se existir)
+      - ./init-db:/docker-entrypoint-initdb.d
 
   # Serviço da sua aplicação
   app:
-    # O ponto ('.') indica que o Docker deve procurar o Dockerfile nesta pasta.
     build: .
-    container_name: movie_theather_api_app # Mudei o nome para ser mais específico
+    container_name: movie_theather_api_app
     ports:
       - "8080:8080"
     depends_on:
       - database
     environment:
-      # Variáveis de ambiente que a sua aplicação usará
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/MovieTheater
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Samella4551%10

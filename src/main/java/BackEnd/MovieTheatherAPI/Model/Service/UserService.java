@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -71,4 +71,13 @@ public class UserService {
     return userRepository.findAll();
     }
 
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void setAdmin(Long id) {
+        userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Id invalido")
+        ).setRole(UserEntity.Role.ROLE_ADMIN);
+    }
 }
